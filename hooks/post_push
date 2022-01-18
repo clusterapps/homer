@@ -1,0 +1,8 @@
+#!/bin/bash
+
+IFS='-' read -r TAG string <<< "$DOCKER_TAG"
+
+docker manifest create clusterapps/homer:$TAG clusterapps/homer:$TAG-amd64 clusterapps/homer:$TAG-arm32v7 clusterapps/homer:$TAG-arm64v8
+docker manifest annotate clusterapps/homer:$TAG clusterapps/homer:$TAG-arm32v7 --os linux --arch arm
+docker manifest annotate clusterapps/homer:$TAG clusterapps/homer:$TAG-arm64v8 --os linux --arch arm64 --variant v8
+docker manifest push --purge clusterapps/homer:$TAG
